@@ -5,6 +5,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { db } from "~/server/db";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -39,5 +40,11 @@ export const postRouter = createTRPCRouter({
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
+  }),
+
+  getLapangan: publicProcedure.query(() => {
+    return db.lapangan.findMany({
+      orderBy: { id_lapangan: "asc" },
+    });
   }),
 });
