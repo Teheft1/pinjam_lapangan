@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import {
+  DefaultUser,
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
@@ -23,8 +24,11 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string;
       // ...other properties
-      // role: UserRole;
+      role: string;
     };
+  }
+  interface User extends DefaultUser {
+    role: string;
   }
 
   // interface User {
@@ -45,12 +49,41 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        role: user.role,
       },
     }),
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
     GoogleProvider({
+      profile(profile: {
+        email?: string;
+        email_verified?: boolean;
+        name?: string;
+        picture?: string;
+        sub?: string;
+      }) {
+        console.log("profile google", profile);
+
+        if (!profile.sub) {
+          throw new Error("No ID found in profile");
+        }
+
+        let userRole = "User";
+        if (profile?.email == "yunusdhanzky@gmail.com") {
+          userRole = "Admin";
+        }
+
+        return {
+          // ...profile,
+          name: profile.name,
+          email: profile.email,
+          emailVerified: profile.email_verified,
+          image: profile.picture,
+          id: profile.sub,
+          role: userRole,
+        };
+      },
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
