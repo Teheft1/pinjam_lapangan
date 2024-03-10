@@ -24,7 +24,8 @@ export const postRouter = createTRPCRouter({
       return ctx.db.post.create({
         data: {
           name: input.name,
-          createdBy: { connect: { id: ctx.session.user.id } },
+          createdBy: ctx.session.user.id,
+          updatedAt: new Date(),
         },
       });
     }),
@@ -32,7 +33,7 @@ export const postRouter = createTRPCRouter({
   getLatest: protectedProcedure.query(({ ctx }) => {
     return ctx.db.post.findFirst({
       orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
+      where: { createdBy: ctx.session.user.id },
     });
   }),
 
