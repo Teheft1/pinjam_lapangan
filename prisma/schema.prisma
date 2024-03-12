@@ -142,6 +142,7 @@ model lapangan {
   created_at       DateTime           @default(now()) @db.DateTime(0)
   modified_by      String             @db.VarChar(50)
   modified_at      DateTime?          @db.DateTime(0)
+  transaksi        transaksi[]
   transaksi_detail transaksi_detail[]
 }
 
@@ -214,7 +215,8 @@ model subscriber {
 model transaksi {
   id_trans         Int                @id @default(autoincrement())
   id_invoice       String             @db.Char(15)
-  user_id          Int
+  id_lapangan      Int
+  user_id          String
   subtotal         Int
   diskon           Int
   grand_total      Int
@@ -223,10 +225,13 @@ model transaksi {
   status           Int
   created_date     DateTime           @db.Date
   created_time     DateTime           @db.Time(0)
-  users            users              @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "transaksi_FK")
+  updatedAt         DateTime           @db.DateTime(0)
+  user             user               @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "transaksi_FK")
+  lapangan         lapangan           @relation(fields: [id_lapangan], references: [id_lapangan], onDelete: Cascade, map: "transaksi_FK_1")
   transaksi_detail transaksi_detail[]
 
   @@index([user_id], map: "transaksi_FK")
+  @@index([id_lapangan], map: "transaksi_FK_1")
 }
 
 model transaksi_detail {
@@ -248,41 +253,43 @@ model transaksi_detail {
 }
 
 model user {
-  id            String    @id @default(uuid())
+  id            String      @id @default(uuid())
   name          String?
-  email         String?   @unique(map: "User_email_key")
+  email         String?     @unique(map: "User_email_key")
   emailVerified DateTime?
   image         String?
   role          String?
   account       account[]
   post          post[]
   session       session[]
+  transaksi     transaksi[]
 }
 
 model users {
-  id                      Int         @id @default(autoincrement())
-  name                    String      @db.VarChar(50)
-  username                String      @db.VarChar(100)
-  password                String      @db.VarChar(255)
-  email                   String      @db.VarChar(100)
-  phone                   String?     @db.VarChar(20)
+  id                      Int       @id @default(autoincrement())
+  name                    String    @db.VarChar(50)
+  username                String    @db.VarChar(100)
+  password                String    @db.VarChar(255)
+  email                   String    @db.VarChar(100)
+  phone                   String?   @db.VarChar(20)
   provinsi                Int?
   kota                    Int?
-  address                 String      @db.Text
+  address                 String    @db.Text
   usertype                Int
-  active                  Int?        @db.UnsignedTinyInt
-  photo                   String?     @db.Text
-  photo_type              String?     @db.VarChar(10)
-  ip_address              String      @db.VarChar(45)
-  salt                    String?     @db.VarChar(255)
-  activation_code         String?     @db.VarChar(40)
-  forgotten_password_code String?     @db.VarChar(40)
-  forgotten_password_time Int?        @db.UnsignedInt
-  remember_code           String?     @db.VarChar(40)
+  active                  Int?      @db.UnsignedTinyInt
+  photo                   String?   @db.Text
+  photo_type              String?   @db.VarChar(10)
+  ip_address              String    @db.VarChar(45)
+  salt                    String?   @db.VarChar(255)
+  activation_code         String?   @db.VarChar(40)
+  forgotten_password_code String?   @db.VarChar(40)
+  forgotten_password_time Int?      @db.UnsignedInt
+  remember_code           String?   @db.VarChar(40)
   last_login              Int?
   created_on              Int
-  modified                DateTime?   @db.DateTime(0)
-  transaksi               transaksi[]
+  modified                DateTime? @db.DateTime(0)
+
+  @@ignore
 }
 
 model users_group {
