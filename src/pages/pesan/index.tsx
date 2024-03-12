@@ -2,7 +2,6 @@ import React from "react";
 import { api } from "~/utils/api";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/router";
 
 const Index = () => {
@@ -16,11 +15,11 @@ const Index = () => {
 
   const { data: sessionData } = useSession();
 
-  const handlePesan = async () => {
+  const handlePesan = async (id: number) => {
     if (!sessionData) {
-      await router.push(`/api/auth/signin?callbackUrl=/formpesan`);
+      await router.push(`/api/auth/signin?callbackUrl=/formpesan/${id}`);
     } else {
-      await router.push(`/formpesan`);
+      await router.push(`/formpesan/${id}`);
     }
   };
   const { data: Lapangan } = api.post.getLapangan.useQuery();
@@ -40,7 +39,9 @@ const Index = () => {
                 width={150}
               />
               <p>{lapangan.harga}</p>
-              <button onClick={handlePesan}>Pesan</button>
+              <button onClick={() => handlePesan(lapangan.id_lapangan)}>
+                Pesan
+              </button>
             </div>
           );
         })}
