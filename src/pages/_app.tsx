@@ -7,6 +7,8 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import Navbar from "~/(components)/Navbar";
+import { useRouter } from "next/router";
+import AdminLayout from "~/(components)/AdminLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,11 +19,28 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const router = useRouter();
+  const adminPanel = router.route.startsWith("/admin");
+
+  // const getLayout = (Component: React.ComponentType) => {
+  //   return adminPanel ? (
+  //     <AdminApp>{Component}</AdminApp>
+  //   ) : (
+  //     <MyApp>{Component}</MyApp>
+  //   );
+  // };
+
   return (
     <SessionProvider session={session}>
       <main className={`font-sans ${inter.variable}`}>
-        <Navbar />
-        <Component {...pageProps} />
+        {!adminPanel && <Navbar />}
+        {adminPanel ? (
+          <AdminLayout>
+            <Component {...pageProps} />
+          </AdminLayout>
+        ) : (
+          <Component {...pageProps} />
+        )}
       </main>
     </SessionProvider>
   );
