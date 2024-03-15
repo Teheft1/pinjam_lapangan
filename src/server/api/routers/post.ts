@@ -64,10 +64,10 @@ export const postRouter = createTRPCRouter({
   createPesan: protectedProcedure
     .input(
       z.object({
-        id_lapangan: z.number(),
+        id_lapangans: z.number(),
         // tanggal: z.string(),
-        jam: z.date(),
-        durasi: z.date(),
+        jam: z.string(),
+        durasi: z.string(),
         subtotal: z.number() || undefined,
         grand_total: z.number() || undefined,
         id_invoice: z.string(),
@@ -75,12 +75,12 @@ export const postRouter = createTRPCRouter({
         // deadline: z.date(),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    .mutation(async ({ ctx, input }) => {
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
 
       return ctx.db.transaksi.create({
         data: {
-          id_lapangan: input.id_lapangan,
+          id_lapangan: input.id_lapangans,
           id_invoice: input.id_invoice,
           // tanggal: new Date(input.tanggal),
           // jam: input.jam,
