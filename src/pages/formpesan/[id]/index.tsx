@@ -1,19 +1,18 @@
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { api } from "~/utils/api";
+import { date } from 'zod';
 
 const Index = () => {
-  // if (router.isFallback){
-  //   return <div>loading ...</div>
-  // }
-  // const { id } = useParams<{ id: string }>();
-  // console.log(parseInt(id));
-
-  // const ids = parseInt(id);
-  // const { data: getlap } = api.post.getlapid.useQuery({
-  //   id: ids,
-  // });
+  const [Pesan, setPesan] = useState({
+    Nama: "",
+    NoHP: "",
+    tanggal: "",
+    jam: "",
+    durasi: "",
+    catatan: "",
+  });
 
   const router = useRouter();
 
@@ -29,41 +28,87 @@ const Index = () => {
     id: ids,
   });
 
-  function handlepesan() {
-    const addPesan = api.post.createPesan.useQuery({
-      id_lapangan: ids,
-      catatan: "galo",
-      jam: new Date(),
-      durasi: new Date(),
+  const addPesan = api.post.createPesan.useMutation();
+
+  const handlepesan = (e: React.FormEvent) => {
+    e.preventDefault();
+    addPesan.mutate({
+      id_lapangans: ids,
+      catatan: Pesan.catatan,
+      jam: Pesan.jam,
+      durasi: Pesan.durasi,
       subtotal: getlap?.harga ?? 0,
       grand_total: getlap?.harga ?? 0,
       id_invoice: "asdadw",
     });
+
+    setPesan({
+      Nama: "",
+      NoHP: "",
+      tanggal: "",
+      jam: "",
+      durasi: "",
+      catatan: "",
+    });
+  };
+
+  function createInvoice(){
+    const date  = new Date();
   }
 
   return (
     <form>
       <div>
         <label htmlFor="nama">Nama</label>
-        <input type="text" id="nama" />
+        <input
+          type="text"
+          id="nama"
+          onChange={(e) => setPesan({ ...Pesan, Nama: e.target.value })}
+        />
       </div>
       <div>
         <label htmlFor="no_hp">No Hp</label>
-        <input type="text" id="no_hp" />
+        <input
+          type="number"
+          id="no_hp"
+          onChange={(e) => setPesan({ ...Pesan, NoHP: e.target.value })}
+        />
       </div>
       <div>
         <label htmlFor="tanggal">Tanggal</label>
-        <input type="date" id="tanggal" />
+        <input
+          type="date"
+          id="tanggal"
+          onChange={(e) => setPesan({ ...Pesan, tanggal: e.target.value })}
+        />
       </div>
       <div>
         <label htmlFor="jam">Jam</label>
-        <input type="time" id="jam" />
+        <input
+          type="time"
+          id="jam"
+          onChange={(e) => setPesan({ ...Pesan, jam: e.target.value })}
+        />
       </div>
       <div>
         <label htmlFor="durasi">Durasi</label>
-        <input type="number" id="durasi" />
+        <input
+          type="number"
+          id="durasi"
+          onChange={(e) => setPesan({ ...Pesan, durasi: e.target.value })}
+        />
       </div>
-      <button type="submit">Submit</button>
+      <div>
+        <label htmlFor="catatan">Catatan</label>
+        <input
+          type="text"
+          id="catatan"
+          onChange={(e) => setPesan({ ...Pesan, catatan: e.target.value })}
+        />
+      </div>
+      <button type="submit" onClick={handlepesan}>
+        Submit
+      </button>
     </form>
   );
 };
