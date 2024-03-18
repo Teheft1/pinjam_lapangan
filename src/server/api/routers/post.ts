@@ -42,7 +42,6 @@ export const postRouter = createTRPCRouter({
     return "you can now see this secret message!";
   }),
 
-
   getlapid: protectedProcedure
     .input(
       z.object({
@@ -70,7 +69,7 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       return ctx.db.transaksi.create({
         data: {
