@@ -18,4 +18,9 @@ export const dataRouter = createTRPCRouter({
       where: { user_id: ctx.session?.user.id },
     });
   }),
+  getoneInvoice: protectedProcedure.query(({ctx})=>{
+    return ctx.db.transaksi.findFirst({
+        orderBy: { id_trans: "desc" },
+    })
+  })
 });

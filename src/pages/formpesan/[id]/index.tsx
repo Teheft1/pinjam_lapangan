@@ -66,11 +66,11 @@ const Index = () => {
   };
 
   function createInvoice() {
-    const date = new Date();
+    const date = new Date("yyyy-MM-dd");
     const strdate = date.toISOString();
-    const strdate2 = strdate.replace(/:/g, "-");
+    // const strdate2 = strdate.replace(/:/g, "-");
 
-    return strdate2;
+    return strdate + "001";
   }
   return (
     <form>
