@@ -2,9 +2,22 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { api } from "~/utils/api";
-import { date } from 'zod';
+import { date } from "zod";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const Index = () => {
+  const router = useRouter();
+
+  const { data: sessionData } = useSession();
+  useEffect(() => {
+    if (!sessionData) {
+      router.push(`/pesan`).catch((err) => console.error(err));
+    }
+  }, [sessionData, router]);
+  // if (!sessionData) {
+  //   router.push(`/pesan`).catch((err) => console.error(err));
+  // }
   const [Pesan, setPesan] = useState({
     Nama: "",
     NoHP: "",
@@ -13,8 +26,6 @@ const Index = () => {
     durasi: "",
     catatan: "",
   });
-
-  const router = useRouter();
 
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -31,6 +42,8 @@ const Index = () => {
   const addPesan = api.post.createPesan.useMutation();
 
   const handlepesan = (e: React.FormEvent) => {
+    const invoice = createInvoice();
+    console.log(invoice);
     e.preventDefault();
     addPesan.mutate({
       id_lapangans: ids,
@@ -39,7 +52,7 @@ const Index = () => {
       durasi: Pesan.durasi,
       subtotal: getlap?.harga ?? 0,
       grand_total: getlap?.harga ?? 0,
-      id_invoice: "asdadw",
+      id_invoice: invoice,
     });
 
     setPesan({
@@ -52,10 +65,13 @@ const Index = () => {
     });
   };
 
-  function createInvoice(){
-    const date  = new Date();
-  }
+  function createInvoice() {
+    const date = new Date();
+    const strdate = date.toISOString();
+    const strdate2 = strdate.replace(/:/g, "-");
 
+    return strdate2;
+  }
   return (
     <form>
       <div>
@@ -63,6 +79,7 @@ const Index = () => {
         <input
           type="text"
           id="nama"
+          // value={Pesan.Nama}
           onChange={(e) => setPesan({ ...Pesan, Nama: e.target.value })}
         />
       </div>
@@ -71,6 +88,7 @@ const Index = () => {
         <input
           type="number"
           id="no_hp"
+          // value={Pesan.NoHP}
           onChange={(e) => setPesan({ ...Pesan, NoHP: e.target.value })}
         />
       </div>
@@ -79,6 +97,7 @@ const Index = () => {
         <input
           type="date"
           id="tanggal"
+          // value={Pesan.tanggal}
           onChange={(e) => setPesan({ ...Pesan, tanggal: e.target.value })}
         />
       </div>
@@ -87,6 +106,7 @@ const Index = () => {
         <input
           type="time"
           id="jam"
+          // value={Pesan.jam}
           onChange={(e) => setPesan({ ...Pesan, jam: e.target.value })}
         />
       </div>
@@ -95,6 +115,7 @@ const Index = () => {
         <input
           type="number"
           id="durasi"
+          // value={Pesan.durasi}
           onChange={(e) => setPesan({ ...Pesan, durasi: e.target.value })}
         />
       </div>
@@ -103,6 +124,7 @@ const Index = () => {
         <input
           type="text"
           id="catatan"
+          // value={Pesan.catatan}
           onChange={(e) => setPesan({ ...Pesan, catatan: e.target.value })}
         />
       </div>
