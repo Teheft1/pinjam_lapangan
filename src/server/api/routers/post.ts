@@ -6,7 +6,6 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { db } from "~/server/db";
-import { time } from "console";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -43,11 +42,6 @@ export const postRouter = createTRPCRouter({
     return "you can now see this secret message!";
   }),
 
-  getLapangan: publicProcedure.query(() => {
-    return db.lapangan.findMany({
-      orderBy: { id_lapangan: "asc" },
-    });
-  }),
 
   getlapid: protectedProcedure
     .input(
