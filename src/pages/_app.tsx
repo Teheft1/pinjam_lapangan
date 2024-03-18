@@ -22,14 +22,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const router = useRouter();
   const adminPanel = router.route.startsWith("/admin");
 
-  // const getLayout = (Component: React.ComponentType) => {
-  //   return adminPanel ? (
-  //     <AdminApp>{Component}</AdminApp>
-  //   ) : (
-  //     <MyApp>{Component}</MyApp>
-  //   );
-  // };
-
   return (
     <SessionProvider session={session}>
       <main className={`font-sans ${inter.variable}`}>
