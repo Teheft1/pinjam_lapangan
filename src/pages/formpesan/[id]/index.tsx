@@ -45,15 +45,25 @@ const Index = () => {
     const invoice = createInvoice();
     console.log(invoice);
     e.preventDefault();
-    addPesan.mutate({
-      id_lapangans: ids,
-      catatan: Pesan.catatan,
-      jam: Pesan.jam,
-      durasi: Pesan.durasi,
-      subtotal: getlap?.harga ?? 0,
-      grand_total: getlap?.harga ?? 0,
-      id_invoice: invoice,
-    });
+    addPesan.mutate(
+      {
+        id_lapangans: ids,
+        catatan: Pesan.catatan,
+        jam: Pesan.jam,
+        durasi: Pesan.durasi,
+        subtotal: getlap?.harga ?? 0,
+        grand_total: getlap?.harga ?? 0,
+        id_invoice: invoice,
+      },
+      {
+        onError: (err) => {
+          console.log(err);
+        },
+        onSuccess: () => {
+          router.push(`/pesan`).catch((err) => console.error(err));
+        },
+      },
+    );
 
     setPesan({
       Nama: "",
@@ -66,11 +76,12 @@ const Index = () => {
   };
 
   function createInvoice() {
-    const date = new Date("yyyy-MM-dd");
-    const strdate = date.toISOString();
+    const date = new Date();
+    const strdate = date.toISOString().split("T")[0]?.replace(/-/g, "");
+    console.log(strdate);
     // const strdate2 = strdate.replace(/:/g, "-");
 
-    return strdate + "001";
+    return strdate + "-" + "001";
   }
   return (
     <form>
