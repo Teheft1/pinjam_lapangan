@@ -13,4 +13,9 @@ export const dataRouter = createTRPCRouter({
       orderBy: { id_lapangan: "asc" },
     });
   }),
+  getHistory: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.transaksi.findMany({
+      where: { user_id: ctx.session?.user.id },
+    });
+  }),
 });

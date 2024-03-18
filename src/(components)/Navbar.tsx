@@ -19,7 +19,7 @@ const Navbar = () => {
         <Link href={"/"}>Home</Link>
         <Link href={"/lapangan"}>Lapangan</Link>
         <Link href={"/pesan"}>Pesan</Link>
-        <Link href={"/histori"}>Histori</Link>
+        <Link href={"/history"}>Histori</Link>
         <AuthShowcase />
       </div>
     </div>
