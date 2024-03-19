@@ -2,7 +2,6 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { api } from "~/utils/api";
-import { date } from "zod";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 
@@ -15,9 +14,6 @@ const Index = () => {
       router.push(`/pesan`).catch((err) => console.error(err));
     }
   }, [sessionData, router]);
-  // if (!sessionData) {
-  //   router.push(`/pesan`).catch((err) => console.error(err));
-  // }
   const [Pesan, setPesan] = useState({
     Nama: "",
     NoHP: "",
@@ -81,15 +77,13 @@ const Index = () => {
     const date = new Date();
     const strdate = date.toISOString().split("T")[0]?.replace(/-/g, "");
     let kode;
-    // console.log(checkinvoice);
     const nosplit = checkinvoice?.data?.id_invoice.split("-")[1];
-    if(nosplit){
-      // const getNO = nosplit.split("-")[1];
-      kode = (parseInt(nosplit) + 1).toString();
-    }else{
-      kode = "001"
+    console.log(nosplit);
+    if (nosplit) {
+      kode = (parseFloat(nosplit) + 1).toString().padStart(3, "0");
+    } else {
+      kode = "001";
     }
-    // const strdate2 = strdate.replace(/:/g, "-");
 
     const invoice = strdate + "-" + kode;
 
