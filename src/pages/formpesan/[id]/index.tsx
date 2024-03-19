@@ -43,7 +43,7 @@ const Index = () => {
 
   const handlepesan = (e: React.FormEvent) => {
     const invoice = createInvoice();
-    console.log(invoice);
+    // console.log(invoice);
     e.preventDefault();
     addPesan.mutate(
       {
@@ -75,13 +75,25 @@ const Index = () => {
     });
   };
 
+  const checkinvoice = api.data.getoneInvoice.useQuery();
+
   function createInvoice() {
     const date = new Date();
     const strdate = date.toISOString().split("T")[0]?.replace(/-/g, "");
-    console.log(strdate);
+    let kode;
+    // console.log(checkinvoice);
+    const nosplit = checkinvoice?.data?.id_invoice.split("-")[1];
+    if(nosplit){
+      // const getNO = nosplit.split("-")[1];
+      kode = (parseInt(nosplit) + 1).toString();
+    }else{
+      kode = "001"
+    }
     // const strdate2 = strdate.replace(/:/g, "-");
 
-    return strdate + "-" + "001";
+    const invoice = strdate + "-" + kode;
+
+    return invoice;
   }
   return (
     <form>
