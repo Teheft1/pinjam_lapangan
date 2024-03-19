@@ -1,4 +1,5 @@
 import { number, z } from "zod";
+import { useRouter } from "next/router";
 
 import {
   createTRPCRouter,
@@ -18,9 +19,9 @@ export const dataRouter = createTRPCRouter({
       where: { user_id: ctx.session?.user.id },
     });
   }),
-  getoneInvoice: protectedProcedure.query(({ctx})=>{
+  getoneInvoice: protectedProcedure.query(({ ctx }) => {
     return ctx.db.transaksi.findFirst({
-        orderBy: { id_trans: "desc" },
-    })
-  })
+      orderBy: { id_trans: "desc" },
+    });
+  }),
 });
