@@ -46,7 +46,6 @@ const Pesan = () => {
           );
         })}
       </div>
-      <div>Pesan</div>
     </div>
   );
 };

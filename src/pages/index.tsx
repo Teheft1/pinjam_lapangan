@@ -4,6 +4,7 @@ import Image from "next/image";
 // import Link from "next/link";
 
 import { api } from "~/utils/api";
+// import Midtrans from 'midtrans-client';
 
 export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -64,3 +65,5 @@ function AuthShowcase() {
     </div>
   );
 }
+
+// https://yearly-ample-sparrow.ngrok-free.app

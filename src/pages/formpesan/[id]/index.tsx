@@ -4,6 +4,15 @@ import React, { useState } from "react";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { env } from "~/env";
+
+declare global {
+  interface Window {
+    snap: {
+      pay: (token: string) => void;
+    };
+  }
+}
 
 const Index = () => {
   const router = useRouter();
@@ -13,6 +22,21 @@ const Index = () => {
     if (!sessionData) {
       router.push(`/pesan`).catch((err) => console.error(err));
     }
+    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const clientKey =
+      process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY ??
+      "SB-Mid-client-47eAjJDhYQ6uYuiF";
+
+    const script = document.createElement("script");
+    script.src = snapScript;
+    script.setAttribute("data-client-key", clientKey);
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, [sessionData, router]);
   const [Pesan, setPesan] = useState({
     Nama: "",
@@ -29,17 +53,29 @@ const Index = () => {
 
   const { id } = router.query;
   console.log(parseInt(id as string));
+  const checkinvoice = api.data.getoneInvoice.useQuery();
 
   const ids = parseInt(id as string);
   const { data: getlap } = api.post.getlapid.useQuery({
     id: ids,
   });
-
+  // const getToken = api.data.getToken.useQuery();
+  // const { data: getTokenize } = api.tokenize.getToken.useQuery({
+  //   id_invoice: createInvoice(),
+  //   harga: getlap?.harga,
+  // });
   const addPesan = api.post.createPesan.useMutation();
+  // console.log(getTokenize);
+  const invoice = createInvoice();
+  const { data: getTokenize } = api.tokenize.getToken.useQuery({
+    id_invoice: invoice,
+    harga: getlap?.harga ?? 0,
+  });
 
   const handlepesan = (e: React.FormEvent) => {
     const invoice = createInvoice();
-    // console.log(invoice);
+
+    // console.log(invoice)
     e.preventDefault();
     addPesan.mutate(
       {
@@ -56,7 +92,8 @@ const Index = () => {
           console.log(err);
         },
         onSuccess: () => {
-          router.push(`/pesan`).catch((err) => console.error(err));
+          window.snap.pay(getTokenize ?? "");
+          // router.push(`/pesan`).catch((err) => console.error(err));
         },
       },
     );
@@ -71,9 +108,8 @@ const Index = () => {
     });
   };
 
-  const checkinvoice = api.data.getoneInvoice.useQuery();
-
   function createInvoice() {
+    // const checkinvoice = api.data.getoneInvoice.useQuery();
     const date = new Date();
     const strdate = date.toISOString().split("T")[0]?.replace(/-/g, "");
     let kode;

@@ -1,6 +1,6 @@
 import { number, z } from "zod";
 import { useRouter } from "next/router";
-
+// const Midtrans: any = require("midtrans-client");
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -24,4 +24,21 @@ export const dataRouter = createTRPCRouter({
       orderBy: { id_trans: "desc" },
     });
   }),
+  // getToken: publicProcedure.query(async () => {
+  //   const snap = new Midtrans.Snap({
+  //     isProduction: false,
+  //     serverKey: process.env.MIDTRANS_SERVER_KEY,
+  //     clientKey: process.env.MIDTRANS_CLIENT_KEY,
+  //   });
+
+  //   const parameter = {
+  //     transaction_details: {
+  //       order_id: "order-id-node",
+  //       gross_amount: 200000,
+  //     },
+  //   };
+
+  //   const token = await snap.createTransaction(parameter);
+  //   return token;
+  // }),
 });
