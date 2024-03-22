@@ -1,18 +1,22 @@
+import Image from "next/image";
+
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-import { Inter } from "next/font/google";
+
+import { Poppins } from "next/font/google";
 
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
-import Navbar from "~/(components)/Navbar";
 import { useRouter } from "next/router";
-import AdminLayout from "~/(components)/AdminLayout";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
+import { AdminLayout, Navbar, Hero } from "~/(components)";
+
+const poppins = Poppins({
+  subsets: ["devanagari"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
 });
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -21,26 +25,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const router = useRouter();
   const adminPanel = router.route.startsWith("/admin");
-
-  // const getLayout = (Component: React.ComponentType) => {
-  //   return adminPanel ? (
-  //     <AdminApp>{Component}</AdminApp>
-  //   ) : (
-  //     <MyApp>{Component}</MyApp>
-  //   );
-  // };
-
   return (
     <SessionProvider session={session}>
-      <main className={`font-sans ${inter.variable}`}>
-        {!adminPanel && <Navbar />}
-        {adminPanel ? (
-          <AdminLayout>
-            <Component {...pageProps} />
-          </AdminLayout>
-        ) : (
-          <Component {...pageProps} />
-        )}
+      <main className={`${poppins.className}`}>
+        <Navbar />
+        <Hero />
       </main>
     </SessionProvider>
   );
