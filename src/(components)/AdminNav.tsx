@@ -8,21 +8,7 @@ import { TIMEOUT } from "dns";
 
 const AdminNavbar = () => {
   const { data: sessionData } = useSession();
-  return (
-    <div className=" flex flex-row items-center justify-between bg-black p-4 text-white">
-      <div>LOGO</div>
-      <div className="flex flex-row items-center justify-center gap-10">
-        <Link
-          className={`${sessionData?.user?.role === "Admin" ? "block" : "hidden"}`}
-          href={"/admin"}
-        >
-          Admin Dashboard
-        </Link>
-        <Link href={"/"}>Home</Link>
-        <AuthShowcase />
-      </div>
-    </div>
-  );
+  return <div className="">Hallo</div>;
 };
 
 export default AdminNavbar;

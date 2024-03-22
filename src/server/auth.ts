@@ -70,7 +70,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         let userRole = "User";
-        if (profile?.email == "yunusdhanzky@gmail.com") {
+        if (profile?.email == "rifqiromadhoni44@gmail.com") {
           userRole = "Admin";
         }
 
