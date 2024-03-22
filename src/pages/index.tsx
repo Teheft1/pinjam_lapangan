@@ -28,7 +28,6 @@ export default function Home() {
 //   );
 
 //   console.log(sessionData?.user.role);
-
 //   return (
 //     <div className="absolute z-50 flex flex-col items-center justify-center gap-4">
 //       <p className="text-center text-2xl text-white">

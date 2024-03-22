@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-const Index = () => {
+const Pesan = () => {
   // interface DataLap {
   //   id_lapangan: number;
   //   nama_lapangan: string;
@@ -22,7 +22,7 @@ const Index = () => {
       await router.push(`/formpesan/${id}`);
     }
   };
-  const { data: Lapangan } = api.post.getLapangan.useQuery();
+  const { data: Lapangan } = api.data.getLapangan.useQuery();
 
   return (
     <div>
@@ -46,9 +46,8 @@ const Index = () => {
           );
         })}
       </div>
-      <div>index</div>
     </div>
   );
 };
 
-export default Index;
+export default Pesan;

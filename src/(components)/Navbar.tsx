@@ -113,7 +113,6 @@ const Navbar = () => {
         >
           {sessionData ? "Logout" : "Sign in"}
         </Link>
-
         <div
           className={`rounded-full bg-[#FE770B] px-[18px] py-[5px] hover:rotate-2 hover:scale-110 hover:bg-transparent hover:transition-all hover:duration-300 hover:ease-in-out`}
         >
