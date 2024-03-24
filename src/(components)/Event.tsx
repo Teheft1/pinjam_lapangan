@@ -28,9 +28,10 @@ const Event = () => {
 
   const whileHoverCard = {
     scale: 1.125,
-    rotate: "2deg",
+    rotate: "1deg",
     color: "#FE770B",
     textDecoration: "underline",
+    // transition: { duration: 0.25 },
   };
 
   const listCard = [
@@ -72,7 +73,7 @@ const Event = () => {
             }}
             initial="hidden"
             animate={animationControls}
-            transition={{ duration: 1, ease: "easeInOut" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
             className="text-center text-[64px] font-bold text-[#1F140D]"
           >
             <span className="text-[#FE770B]">EVENT</span> KEBRAON SPROT CENTRE
@@ -98,27 +99,43 @@ const Event = () => {
             visibleValue={{ ...visibleVariant }}
           />
 
+          <div className="flex flex-row items-center justify-between gap-20">
+            <Image
+              src={"/btnNextPage.svg"}
+              width={50}
+              height={50}
+              alt="Next Page Button"
+              className="transition-all duration-200 ease-in-out hover:rotate-45 hover:scale-125"
+            />
+            <motion.div
+              transition={{ staggerChildren: 1 }}
+              className="mt-[5vh] flex gap-11"
+            >
+              {listCard.map((card, index) => (
+                <CustomCard
+                  whileHoverStyle={{ ...whileHoverCard }}
+                  i={index}
+                  hiddenValue={{ ...hiddenVariant }}
+                  visibleValue={{ ...visibleVariant }}
+                  animationControl={animationControls}
+                  title={card.title}
+                  desc={card.desc}
+                  date={card.date}
+                  organizer={card.organizer}
+                  linkImg={card.linkImg}
+                  ref={ref}
+                />
+              ))}
+            </motion.div>
+            <Image
+              src={"/btnNextPage.svg"}
+              width={50}
+              height={50}
+              alt="Next Page Button"
+              className="rotate-180 transition-all duration-200 ease-in-out hover:rotate-[225deg] hover:scale-125"
+            />
+          </div>
           {/* Container Card */}
-          <motion.div
-            transition={{ staggerChildren: 1 }}
-            className="mt-[5vh] flex gap-11"
-          >
-            {listCard.map((card, index) => (
-              <CustomCard
-                whileHoverStyle={{ ...whileHoverCard }}
-                i={index}
-                hiddenValue={{ ...hiddenVariant }}
-                visibleValue={{ ...visibleVariant }}
-                animationControl={animationControls}
-                title={card.title}
-                desc={card.desc}
-                date={card.date}
-                organizer={card.organizer}
-                linkImg={card.linkImg}
-                ref={ref}
-              />
-            ))}
-          </motion.div>
         </div>
       </div>
       {/* BACKROUND IMAGE */}

@@ -1,11 +1,19 @@
-import Image from "next/image";
-import { AdminLayout, Navbar, MainHero, Event } from "~/(components)";
+import {
+  MainHero,
+  Event,
+  TotalUser,
+  ListLapangan,
+  PesanLapangan,
+} from "~/(components)";
 
 const Hero = () => {
   return (
     <div>
       <MainHero />
       <Event />
+      <TotalUser />
+      <ListLapangan />
+      <PesanLapangan />
     </div>
   );
 };

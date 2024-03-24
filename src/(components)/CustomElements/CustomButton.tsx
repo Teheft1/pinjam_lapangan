@@ -2,15 +2,21 @@ import Image from "next/image";
 import { CustomButtonProps } from "types";
 import { motion } from "framer-motion";
 
-const CustomButton = ({ title, containerStyle }: CustomButtonProps) => {
+const CustomButton = ({
+  title,
+  containerStyle,
+  placeholder,
+  content,
+}: CustomButtonProps) => {
   return (
     <motion.button
       disabled={false}
       type={"button"}
-      className={`${containerStyle}`}
+      className={containerStyle}
       onClick={() => {}}
     >
-      <span>{title}</span>
+      <p>{title || placeholder}</p>
+      {content && content()}
     </motion.button>
   );
 };

@@ -41,7 +41,7 @@ const MainHero = () => {
         <span className="mt-6 text-[25px] font-extralight text-[#FFF7F2]">
           <AnimatedText
             text="Ciptakan latihan anda lebih berkesan dan bermakna bersama"
-            durationText={0.025}
+            durationText={0.015}
             parentStyle="w-[60%]"
             hiddenValue={hiddenVariant}
             visibleValue={visibleVariant}
@@ -55,7 +55,7 @@ const MainHero = () => {
           />
           <AnimatedText
             text="Segera pesan dengan promo yang ada."
-            durationText={0.025}
+            durationText={0.015}
             hiddenValue={{ ...hiddenVariant }}
             visibleValue={{ ...visibleVariant }}
           />
