@@ -1,8 +1,21 @@
 import { Variant, VariantLabels, Variants } from "framer-motion";
 
 export interface CustomButtonProps {
-  title: string;
+  title?: string;
   containerStyle?: string;
+  placeholder?: string;
+  content?: () => JSX.Element;
+}
+
+export interface CustomDropdownProps {
+  placeholder?: string;
+  containerStyle?: string;
+  list?: Array<string>;
+  iconLink?: string;
+  iconElement?: () => JSX.Element;
+  width?: number;
+  height?: number;
+  type: string; // dropdown | counter | date
 }
 
 export interface AnimatedTextProps {
@@ -26,6 +39,21 @@ export interface CustomCardProps {
   i: number;
   hiddenValue: any;
   visibleValue: any;
+  ref?: any;
+  animationControl?: any;
+  whileHoverStyle?: any;
+}
+
+export interface CustomCardLapanganProps {
+  namaLapangan: string;
+  desc: () => JSX.Element;
+  linkImg: string;
+  listHarga: () => JSX.Element;
+  slot: number;
+  linkHref: string;
+  i?: number;
+  hiddenValue?: any;
+  visibleValue?: any;
   ref?: any;
   animationControl?: any;
   whileHoverStyle?: any;

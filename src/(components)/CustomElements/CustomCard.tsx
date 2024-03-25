@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { CustomCardProps } from "types";
-import { motion } from "framer-motion";
+import { delay, motion } from "framer-motion";
 
 const CustomCard = ({
   title,
@@ -19,19 +19,23 @@ const CustomCard = ({
     hidden: {
       ...hiddenValue,
     },
-    visible: {
+    visible: (index: number) => ({
+      transition: {
+        delay: index * 0.25,
+      },
       ...visibleValue,
-    },
+    }),
   };
   return (
     <div ref={ref}>
       <motion.div
-        // whileHover={whileHoverStyle & {transition: { duration: 0.25 }}
-        initial={DefaultAnimation.hidden}
-        animate={animationControl || "visible"}
-        transition={{ duration: 0.25, delay: 0.25 * i }}
-        ref={ref}
         variants={DefaultAnimation}
+        initial="hidden"
+        whileInView="visible"
+        whileHover={whileHoverStyle}
+        viewport={{ once: true }}
+        custom={i}
+        // ref={ref}
         className="mx-auto flex h-[40vh] w-[17.5vw] flex-col rounded-md bg-[#FCF8F5] pt-1 drop-shadow-[4px_4px_4px_rgba(0,0,0,0.15)]"
       >
         <div className="mx-auto mt-3 flex h-[60%] w-[95%] flex-col justify-center overflow-hidden rounded-xl bg-red-500">
