@@ -119,7 +119,7 @@ const PesanLapangan = () => {
               </p>
               <input
                 type="text"
-                placeholder="Nopal Jurusan Redshift"
+                placeholder="Nopal 165 fullarmor i7 32"
                 className="focus:border-teal  box-border h-[71px] w-[886px] rounded-[8px] bg-transparent pl-5 focus:border-[3px] focus:border-[#FE770B] focus:outline-none focus:ring-0"
               />
             </div>
