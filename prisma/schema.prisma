@@ -136,6 +136,8 @@ model kota {
 model lapangan {
   id_lapangan      Int                @id @default(autoincrement())
   nama_lapangan    String             @db.VarChar(100)
+  jenis_lapangan   String?             @db.VarChar(100)
+  status_lapangan  Int?                @default(1)
   harga            Int
   foto             String             @db.Text
   created_by       String             @db.VarChar(50)

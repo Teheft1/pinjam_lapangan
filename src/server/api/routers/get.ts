@@ -9,11 +9,11 @@ import {
 import { db } from "~/server/db";
 
 export const dataRouter = createTRPCRouter({
-  getLapangan: publicProcedure.query(() => {
-    return db.lapangan.findMany({
-      orderBy: { id_lapangan: "asc" },
-    });
-  }),
+  // getLapangan: publicProcedure.query(() => {
+  //   return db.lapangan.findMany({
+  //     orderBy: { id_lapangan: "asc" },
+  //   });
+  // }),
   getHistory: protectedProcedure.query(({ ctx }) => {
     return ctx.db.transaksi.findMany({
       where: { user_id: ctx.session?.user.id },
@@ -22,6 +22,21 @@ export const dataRouter = createTRPCRouter({
   getoneInvoice: protectedProcedure.query(({ ctx }) => {
     return ctx.db.transaksi.findFirst({
       orderBy: { id_trans: "desc" },
+    });
+  }),
+  getlapbyHardfloor: publicProcedure.query(() => {
+    return db.lapangan.findMany({
+      where: { jenis_lapangan: "Hardfloor" },
+    });
+  }),
+  getlapbybadminton: publicProcedure.query(() => {
+    return db.lapangan.findMany({
+      where: { jenis_lapangan: "Badminton" },
+    });
+  }),
+  getlapbysintetis: publicProcedure.query(() => {
+    return db.lapangan.findMany({
+      where: { jenis_lapangan: "Sintetis" },
     });
   }),
   // getToken: publicProcedure.query(async () => {

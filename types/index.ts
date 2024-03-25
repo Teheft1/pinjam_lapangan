@@ -1,4 +1,5 @@
 import { Variant, VariantLabels, Variants } from "framer-motion";
+import { da } from "date-fns/locale";
 
 export interface CustomButtonProps {
   title?: string;
@@ -16,6 +17,7 @@ export interface CustomDropdownProps {
   width?: number;
   height?: number;
   type: string; // dropdown | counter | date
+  onItemSelected?: (item: string) => void;
 }
 
 export interface AnimatedTextProps {
@@ -49,7 +51,7 @@ export interface CustomCardLapanganProps {
   desc: () => JSX.Element;
   linkImg: string;
   listHarga: () => JSX.Element;
-  slot: number;
+  slot: number | undefined;
   linkHref: string;
   i?: number;
   hiddenValue?: any;
@@ -57,4 +59,5 @@ export interface CustomCardLapanganProps {
   ref?: any;
   animationControl?: any;
   whileHoverStyle?: any;
+  onPesan?: (data: any) => void;
 }

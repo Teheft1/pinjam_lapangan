@@ -1,7 +1,10 @@
 import Image from "next/image";
 import { CustomCardLapanganProps } from "types";
 import { delay, motion } from "framer-motion";
-
+import { api } from "~/utils/api";
+import { useRouter } from "next/router";
+import { on } from "events";
+import { da } from "date-fns/locale";
 const CustomCardLapangan = ({
   namaLapangan,
   desc,
@@ -14,7 +17,9 @@ const CustomCardLapangan = ({
   animationControl,
   whileHoverStyle,
   slot,
+  onPesan,
 }: CustomCardLapanganProps) => {
+  const router = useRouter();
   const DefaultAnimation = {
     hidden: {
       ...hiddenValue,
@@ -25,6 +30,36 @@ const CustomCardLapangan = ({
       },
       ...visibleValue,
     }),
+  };
+  const { data: sintetis } = api.data.getlapbysintetis.useQuery();
+  const { data: hardfloor } = api.data.getlapbyHardfloor.useQuery();
+  const { data: badminton } = api.data.getlapbybadminton.useQuery();
+  const handlePesan = () => {
+    let data;
+    // Here you can access the data of the specific card
+    if (namaLapangan === "Badminton") {
+      // console.log(badminton);
+      data = badminton;
+      // onPesan(badminton);
+    }
+    if (namaLapangan === "Futsal Sintetis") {
+      // console.log(sintetis);
+      data = sintetis;
+      // onPesan(sintetis);
+    }
+    if (namaLapangan === "Futsal Hardfloor") {
+      // console.log(hardfloor);
+      data = hardfloor;
+      // onPesan(hardfloor);
+    }
+    if (onPesan) {
+      onPesan(data);
+    }
+
+    // console.log(namaLapangan);
+    // console.log(desc());
+    // console.log(listHarga());
+    // console.log(slot);
   };
   return (
     <div ref={ref}>
@@ -67,10 +102,15 @@ const CustomCardLapangan = ({
           </h1>
         </div>
         <a
-          href="#"
+          href="#pesanLapangan"
           className="flex justify-end py-5 underline decoration-[#FFBE0A] decoration-2"
         >
-          <h1 className="mr-5 font-semibold text-[#FFBE0A]">Pesan Sekarang!</h1>
+          <button
+            className="mr-5 font-semibold text-[#FFBE0A]"
+            onClick={handlePesan}
+          >
+            Pesan Sekarang!
+          </button>
         </a>
       </motion.div>
     </div>

@@ -2,12 +2,17 @@ import Image from "next/image";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { AnimatedText, CustomCardLapangan } from "./CustomElements";
+import { api } from "~/utils/api";
+import { on } from "events";
 
-const ListLapangan = () => {
+const ListLapangan = ({ onPesan }: { onPesan: object | null | undefined }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
   const animationControls = useAnimation();
+  const { data: sintetis } = api.data.getlapbysintetis.useQuery();
+  const { data: hardfloor } = api.data.getlapbyHardfloor.useQuery();
+  const { data: badminton } = api.data.getlapbybadminton.useQuery();
 
   useEffect(() => {
     if (isInView) {
@@ -59,9 +64,10 @@ const ListLapangan = () => {
         <div className="mt-20 flex flex-row gap-32">
           <CustomCardLapangan
             namaLapangan="Badminton"
-            slot={2}
+            slot={badminton?.length}
             i={0}
             linkHref="#"
+            onPesan={onPesan}
             desc={() => (
               <p className="text-[12px]">
                 Terdapat{" "}
@@ -90,9 +96,10 @@ const ListLapangan = () => {
           />
           <CustomCardLapangan
             namaLapangan="Futsal Sintetis"
-            slot={3}
+            slot={sintetis?.length}
             i={1}
             linkHref="#"
+            onPesan={onPesan}
             desc={() => (
               <p className="text-[12px]">
                 Terdapat <span className="text-[#FE770B]">lapangan futsal</span>{" "}
@@ -116,9 +123,10 @@ const ListLapangan = () => {
           />
           <CustomCardLapangan
             namaLapangan="Futsal Hardfloor"
-            slot={5}
+            slot={hardfloor?.length}
             i={2}
             linkHref="#"
+            onPesan={onPesan}
             desc={() => (
               <p className="text-[12px]">
                 Terdapat <span className="text-[#FE770B]">lapangan futsal</span>{" "}

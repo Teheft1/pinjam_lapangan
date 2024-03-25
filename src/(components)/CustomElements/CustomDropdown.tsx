@@ -11,6 +11,7 @@ const CustomDropdown = ({
   height,
   iconElement,
   type,
+  onItemSelected,
 }: CustomDropdownProps) => {
   const [dropClick, setDropClick] = useState(false);
   const [counter, setCounter] = useState(0);
@@ -54,9 +55,23 @@ const CustomDropdown = ({
               backgroundColor: "#FE770B",
               color: "#F6F5F3",
             }}
+            // onChange={() => {
+            //   if (type == "dropdown") {
+            //     setItemSelected(item);
+            //     if (onItemSelected) {
+            //       setItemSelected(item);
+            //     }
+            //     // setItemSelected(item);
+            //     setDropClick(!dropClick);
+            //   }
+            // }}
             onClick={() => {
               if (type == "dropdown") {
                 setItemSelected(item);
+                if (onItemSelected) {
+                  onItemSelected(item);
+                }
+                // setItemSelected(item);
                 setDropClick(!dropClick);
               } else if (type == "counter") {
                 console.log(counter);

@@ -2,14 +2,133 @@ import Image from "next/image";
 import { CustomButton, CustomDropdown } from "./CustomElements";
 import { useEffect, useState } from "react";
 import { CustomDatePicker } from "./CustomElements";
+import { api } from "~/utils/api";
 
-const PesanLapangan = () => {
+declare global {
+  interface Window {
+    snap: {
+      pay: (token: string) => void;
+      embed: (token: string, { embedId }: { embedId: string }) => void;
+    };
+  }
+}
+
+const PesanLapangan = ({
+  fieldData,
+}: {
+  fieldData: object[] | [] | undefined;
+}) => {
+  const { data: sintetis } = api.data.getlapbysintetis.useQuery();
+  const { data: hardfloor } = api.data.getlapbyHardfloor.useQuery();
+  const { data: badminton } = api.data.getlapbybadminton.useQuery();
+  const addPesan = api.post.createPesan.useMutation();
+  const checkinvoice = api.data.getoneInvoice.useQuery();
+  const [selectedLapangan, setSelectedLapangan] = useState("");
+  const [biodata, setBiodata] = useState({
+    nama: "",
+    noHp: "",
+    asal: "",
+  });
+
+  useEffect(() => {
+    if (fieldData && fieldData[0].jenis_lapangan == "Sintesis") {
+      setSelectedLapangan("Lapangan Futsal Sintetis");
+    }
+    setTotal(
+      ((fieldData && fieldData[0]?.harga) ?? 0) * counterJam * counterLap,
+    );
+    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const clientKey =
+      process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY ??
+      "SB-Mid-client-47eAjJDhYQ6uYuiF";
+
+    const script = document.createElement("script");
+    script.src = snapScript;
+    script.setAttribute("data-client-key", clientKey);
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  });
+
+  if (selectedLapangan === "Lapangan Futsal Sintetis") {
+    fieldData = sintetis;
+  }
+  if (selectedLapangan === "Lapangan Badminton") {
+    fieldData = badminton;
+  }
+  if (selectedLapangan === "Lapangan Futsal Hardfloor") {
+    fieldData = hardfloor;
+  }
+  console.log(fieldData);
+
   const [counterDropdown, setCounterDropdown] = useState(0);
   const [counterLap, setCounterLap] = useState(0);
   const [counterJam, setCounterJam] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  const invoice = createInvoice();
+  const { data: getTokenize } = api.tokenize.getToken.useQuery({
+    id_invoice: invoice,
+    harga: total,
+  });
+
+  function createInvoice() {
+    // const checkinvoice = api.data.getoneInvoice.useQuery();
+    const date = new Date();
+    const strdate = date.toISOString().split("T")[0]?.replace(/-/g, "");
+    let kode;
+    const nosplit = checkinvoice?.data?.id_invoice.split("-")[1];
+    console.log(nosplit);
+    if (nosplit) {
+      kode = (parseFloat(nosplit) + 1).toString().padStart(3, "0");
+    } else {
+      kode = "001";
+    }
+
+    const invoice = strdate + "-" + kode;
+
+    return invoice;
+  }
+
+  const handlepesan = (e: React.FormEvent) => {
+    const invoice = createInvoice();
+
+    // console.log(invoice)
+    e.preventDefault();
+    addPesan.mutate(
+      {
+        id_lapangans: fieldData && fieldData[0]?.id_lapangan,
+        catatan: "Tidak ada",
+        jam: counterLap,
+        durasi: counterJam,
+        subtotal: total,
+        grand_total: total,
+        id_invoice: invoice,
+      },
+      {
+        onError: (err) => {
+          console.log(err);
+        },
+        onSuccess: () => {
+          window.snap.embed(getTokenize ?? "", { embedId: "snap-container" });
+          // router.push(`/pesan`).catch((err) => console.error(err));
+        },
+      },
+    );
+
+    setBiodata({
+      nama: "",
+      noHp: "",
+      asal: "",
+    });
+  };
 
   return (
-    <div className="mt-[100vh]">
+    <div className="mt-[100vh]" id="pesanLapangan">
       {/* Container All */}
       <div className="absolute z-20 box-border w-full px-[15vw]">
         <div className=" z-10 flex justify-center">
@@ -41,6 +160,7 @@ const PesanLapangan = () => {
                 iconLink="/dropDown_1.svg"
                 width={469}
                 height={71}
+                onItemSelected={setSelectedLapangan}
               />
               <CustomDropdown
                 type="counter"
@@ -52,7 +172,14 @@ const PesanLapangan = () => {
                       alt=""
                       className="rotate-180 hover:scale-110"
                       onClick={() => {
-                        setCounterLap(counterLap + 1);
+                        // if (validfieldData) {
+                        //   if (counterLap < validfieldData?.length) {
+                        //     setCounterLap(counterLap + 1);
+                        //   }
+                        // }
+                        if (counterLap < 6) {
+                          setCounterLap(counterLap + 1);
+                        }
                       }}
                     />
                     <img
@@ -119,6 +246,9 @@ const PesanLapangan = () => {
               </p>
               <input
                 type="text"
+                onChange={(e) =>
+                  setBiodata({ ...biodata, nama: e.target.value })
+                }
                 placeholder="Nopal 165 fullarmor i7 32"
                 className="focus:border-teal  box-border h-[71px] w-[886px] rounded-[8px] bg-transparent pl-5 focus:border-[3px] focus:border-[#FE770B] focus:outline-none focus:ring-0"
               />
@@ -130,6 +260,9 @@ const PesanLapangan = () => {
                 </p>
                 <input
                   type="text"
+                  onChange={(e) =>
+                    setBiodata({ ...biodata, noHp: e.target.value })
+                  }
                   placeholder="08xxxxxxxxxx"
                   className="focus:border-teal  box-border h-[71px] w-[398px] rounded-[8px] bg-transparent pl-5 focus:border-[3px] focus:border-[#FE770B] focus:outline-none focus:ring-0"
                 />
@@ -140,6 +273,9 @@ const PesanLapangan = () => {
                 </p>
                 <input
                   type="text"
+                  onChange={(e) =>
+                    setBiodata({ ...biodata, asal: e.target.value })
+                  }
                   placeholder="Bojonegro"
                   className="focus:border-teal  box-border h-[71px] w-[453px] rounded-[8px] bg-transparent pl-5 focus:border-[3px] focus:border-[#FE770B] focus:outline-none focus:ring-0"
                 />
@@ -151,6 +287,7 @@ const PesanLapangan = () => {
               <h1 className="text-[44px] font-semibold text-[#1F140D]">
                 Lanjutkan Pembayaran Anda
               </h1>
+              <div id="snap-container"></div>
             </div>
           </div>
           {/* Div Pesanan */}
@@ -161,7 +298,11 @@ const PesanLapangan = () => {
               </h1>
               {/* <img src="" alt="EEROR" /> */}
               <h1 className="py-7 text-[24px] font-medium text-[#1F140D]">
-                Lapangan Futsal Sintetis
+                Lapangan
+                {selectedLapangan
+                  ? selectedLapangan
+                  : (fieldData && (fieldData[0] as any).jenis_lapangan) || ""}
+                {/* selectedLapangan ? selectedLapangan : */}
               </h1>
               {/* Rincian Pembayaran */}
               <div className="mr-9 flex flex-row justify-between">
@@ -171,22 +312,25 @@ const PesanLapangan = () => {
                   <p>Jumlah Lapangan</p>
                 </div>
                 <div className="text-[14.8px] font-medium text-[#1F140D]">
-                  <p>Rp.70.000</p>
-                  <p>3 Jam</p>
-                  <p>1 Lapangan</p>
+                  <p>Rp.{(fieldData && (fieldData[0] as any).harga) || ""}</p>
+                  <p>{counterJam} Jam</p>
+                  <p>{counterLap} Lapangan</p>
                 </div>
               </div>
               {/* Total */}
               <div className="mr-9 mt-36 flex flex-row justify-between text-[20px] font-normal text-[#1F140D]">
                 <h1>Total</h1>
-                <p>Rp.210.000</p>
+                <p>Rp.{total}</p>
               </div>
             </div>
             {/* Bayar Sekarang */}
             <div className="mt-3 flex h-[44px] w-[316px] items-center justify-center rounded-[10px] bg-[#FE770B]">
-              <h1 className="text-[20px] font-bold text-[#FFF7F2]">
+              <button
+                onClick={handlepesan}
+                className="text-[20px] font-bold text-[#FFF7F2]"
+              >
                 Bayar Sekarang
-              </h1>
+              </button>
             </div>
           </div>
         </div>

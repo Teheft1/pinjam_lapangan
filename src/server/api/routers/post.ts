@@ -59,8 +59,8 @@ export const postRouter = createTRPCRouter({
       z.object({
         id_lapangans: z.number(),
         // tanggal: z.string(),
-        jam: z.string(),
-        durasi: z.string(),
+        jam: z.number(),
+        durasi: z.number(),
         subtotal: z.number() || undefined,
         grand_total: z.number() || undefined,
         id_invoice: z.string(),
