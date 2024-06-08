@@ -5,7 +5,7 @@ import { AnimatedText, CustomCardLapangan } from "./CustomElements";
 import { api } from "~/utils/api";
 import { on } from "events";
 
-const ListLapangan = ({ onPesan }: { onPesan: object | null | undefined }) => {
+const ListLapangan = ({ onPesan }: { onPesan: (data: object) => void }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
@@ -99,6 +99,7 @@ const ListLapangan = ({ onPesan }: { onPesan: object | null | undefined }) => {
             slot={sintetis?.length}
             i={1}
             linkHref="#"
+            ref={ref}
             onPesan={onPesan}
             desc={() => (
               <p className="text-[12px]">
@@ -126,6 +127,7 @@ const ListLapangan = ({ onPesan }: { onPesan: object | null | undefined }) => {
             slot={hardfloor?.length}
             i={2}
             linkHref="#"
+            ref={ref}
             onPesan={onPesan}
             desc={() => (
               <p className="text-[12px]">

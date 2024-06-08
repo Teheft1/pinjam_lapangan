@@ -13,11 +13,7 @@ declare global {
   }
 }
 
-const PesanLapangan = ({
-  fieldData,
-}: {
-  fieldData: object[] | [] | undefined;
-}) => {
+const PesanLapangan = ({ fieldData }: { fieldData: object | null }) => {
   const { data: sintetis } = api.data.getlapbysintetis.useQuery();
   const { data: hardfloor } = api.data.getlapbyHardfloor.useQuery();
   const { data: badminton } = api.data.getlapbybadminton.useQuery();

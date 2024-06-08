@@ -113,6 +113,7 @@ const Event = () => {
             >
               {listCard.map((card, index) => (
                 <CustomCard
+                  key={card.id}
                   whileHoverStyle={{ ...whileHoverCard }}
                   i={index}
                   hiddenValue={{ ...hiddenVariant }}

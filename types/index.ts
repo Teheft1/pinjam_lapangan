@@ -26,7 +26,7 @@ export interface AnimatedTextProps {
   durationText: number;
   parentStyle?: string;
   delay?: number;
-  ref?: string;
+  ref?: React.RefObject<HTMLParagraphElement>;
   animationControl?: object;
   hiddenValue: object;
   visibleValue: object;
@@ -41,8 +41,8 @@ export interface CustomCardProps {
   i: number;
   hiddenValue: object;
   visibleValue: object;
-  ref?: string;
-  animationControl: boolean;
+  ref: React.RefObject<HTMLParagraphElement>;
+  animationControl: any;
   whileHoverStyle?: object;
 }
 
@@ -56,8 +56,8 @@ export interface CustomCardLapanganProps {
   i?: number;
   hiddenValue?: object;
   visibleValue?: object;
-  ref?: string;
-  animationControl?: boolean;
+  ref: React.RefObject<HTMLParagraphElement>;
+  animationControl?: any;
   whileHoverStyle?: object;
   onPesan?: (data: object) => void;
 }
