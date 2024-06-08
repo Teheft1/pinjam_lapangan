@@ -52,7 +52,7 @@ const CustomCardLapangan = ({
       data = hardfloor;
       // onPesan(hardfloor);
     }
-    if (onPesan) {
+    if (onPesan && data) {
       onPesan(data);
     }
 

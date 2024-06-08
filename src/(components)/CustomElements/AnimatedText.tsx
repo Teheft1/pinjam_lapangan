@@ -26,11 +26,13 @@ const AnimatedText = ({
       <motion.span
         transition={{ staggerChildren: durationText, delayChildren: delay }}
         initial="hidden"
-        animate={animationControl || "visible"}
+        animate={animationControl ?? "visible"}
         className={containerStyle}
       >
         {text.split("").map((char) => (
-          <motion.span variants={DefaultAnimation}>{char}</motion.span>
+          <motion.span key={char} variants={DefaultAnimation}>
+            {char}
+          </motion.span>
         ))}
       </motion.span>
     </p>

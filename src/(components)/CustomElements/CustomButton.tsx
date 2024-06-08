@@ -15,7 +15,7 @@ const CustomButton = ({
       className={containerStyle}
       onClick={() => {}}
     >
-      <p>{title || placeholder}</p>
+      <p>{title ?? placeholder}</p>
       {content && content()}
     </motion.button>
   );

@@ -11,7 +11,7 @@ const CustomDatePicker = () => {
   const ref = useRef(null);
 
   const [calendar, setCalendar] = useState("Pilih Tanggal Pesan");
-  const handleSelect = (date: any) => {
+  const handleSelect = (date: number | Date) => {
     setCalendar(format(date, "dd MMM yyyy"));
   };
 

@@ -50,6 +50,7 @@ const CustomDropdown = ({
       <div className="absolute z-20">
         {list?.map((item) => (
           <motion.div
+            key={item}
             whileHover={{
               scale: 1.05,
               backgroundColor: "#FE770B",

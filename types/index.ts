@@ -26,10 +26,10 @@ export interface AnimatedTextProps {
   durationText: number;
   parentStyle?: string;
   delay?: number;
-  ref?: any;
-  animationControl?: any;
-  hiddenValue: any;
-  visibleValue: any;
+  ref?: string;
+  animationControl?: object;
+  hiddenValue: object;
+  visibleValue: object;
 }
 
 export interface CustomCardProps {
@@ -39,11 +39,11 @@ export interface CustomCardProps {
   desc: string;
   linkImg: string;
   i: number;
-  hiddenValue: any;
-  visibleValue: any;
-  ref?: any;
-  animationControl?: any;
-  whileHoverStyle?: any;
+  hiddenValue: object;
+  visibleValue: object;
+  ref?: string;
+  animationControl: boolean;
+  whileHoverStyle?: object;
 }
 
 export interface CustomCardLapanganProps {
@@ -54,10 +54,10 @@ export interface CustomCardLapanganProps {
   slot: number | undefined;
   linkHref: string;
   i?: number;
-  hiddenValue?: any;
-  visibleValue?: any;
-  ref?: any;
-  animationControl?: any;
-  whileHoverStyle?: any;
-  onPesan?: (data: any) => void;
+  hiddenValue?: object;
+  visibleValue?: object;
+  ref?: string;
+  animationControl?: boolean;
+  whileHoverStyle?: object;
+  onPesan?: (data: object) => void;
 }
