@@ -1,8 +1,4 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-
-import { api } from "~/utils/api";
-import CustomButton from "~/(components)/CustomElements/CustomButton";
 
 export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });

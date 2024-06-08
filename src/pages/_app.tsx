@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -9,9 +9,9 @@ import { Poppins } from "next/font/google";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
-import { useRouter } from "next/router";
 
-import { AdminLayout, Navbar, Hero } from "~/(components)";
+
+import { Navbar, Hero } from "~/(components)";
 
 const poppins = Poppins({
   subsets: ["devanagari"],
@@ -20,11 +20,11 @@ const poppins = Poppins({
 });
 
 const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
+
   pageProps: { session, ...pageProps },
 }) => {
-  const router = useRouter();
-  const adminPanel = router.route.startsWith("/admin");
+
+  // const adminPanel = router.route.startsWith("/admin");
   return (
     <SessionProvider session={session}>
       <main className={`${poppins.className}`}>

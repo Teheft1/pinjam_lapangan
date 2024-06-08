@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "ES2022"],
     /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -8,27 +9,29 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,
-
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "checkJs": true,
-
     /* Bundled projects */
-    "lib": ["dom", "dom.iterable", "ES2022"],
+
     "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "jsx": "preserve",
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "incremental": true,
-
+    "noImplicitAny": true,
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
     },
-    "typeRoots": ["./node_modules/midtrans-client", "./@types"]
+    "typeRoots": ["./node_modules/@types", "./@types"]
   },
   "include": [
     ".eslintrc.cjs",
