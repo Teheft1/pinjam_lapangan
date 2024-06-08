@@ -28,7 +28,7 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "typeRoots": ["./node_modules/@abdulrahmanreza"]
+    "typeRoots": ["./node_modules/midtrans-client", "./@types"]
   },
   "include": [
     ".eslintrc.cjs",

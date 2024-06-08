@@ -7,13 +7,28 @@ import { api } from "~/utils/api";
 declare global {
   interface Window {
     snap: {
-      pay: (token: string) => void;
       embed: (token: string, { embedId }: { embedId: string }) => void;
     };
   }
 }
+interface FieldData {
+  id_lapangan: number | undefined;
+  nama_lapangan: string;
+  jenis_lapangan: string | null;
+  status_lapangan: number | null;
+  harga: number;
+  foto: string;
+  created_by: string;
+  created_at: Date;
+  modified_by: string;
+  modified_at: Date | null;
+}
 
-const PesanLapangan = ({ fieldData }: { fieldData: object | null }) => {
+interface PesanLapanganProps {
+  fieldData: FieldData[] | undefined;
+}
+// { fieldData: object | undefined }
+const PesanLapangan = ({ fieldData }: PesanLapanganProps) => {
   const { data: sintetis } = api.data.getlapbysintetis.useQuery();
   const { data: hardfloor } = api.data.getlapbyHardfloor.useQuery();
   const { data: badminton } = api.data.getlapbybadminton.useQuery();
@@ -26,8 +41,17 @@ const PesanLapangan = ({ fieldData }: { fieldData: object | null }) => {
     asal: "",
   });
 
+  if (selectedLapangan === "Lapangan Futsal Sintetis") {
+    fieldData = sintetis;
+  }
+  if (selectedLapangan === "Lapangan Badminton") {
+    fieldData = badminton;
+  }
+  if (selectedLapangan === "Lapangan Futsal Hardfloor") {
+    fieldData = hardfloor;
+  }
   useEffect(() => {
-    if (fieldData && fieldData[0].jenis_lapangan == "Sintesis") {
+    if (fieldData && fieldData[0]?.jenis_lapangan === "Sintesis") {
       setSelectedLapangan("Lapangan Futsal Sintetis");
     }
     setTotal(
@@ -50,15 +74,6 @@ const PesanLapangan = ({ fieldData }: { fieldData: object | null }) => {
     };
   });
 
-  if (selectedLapangan === "Lapangan Futsal Sintetis") {
-    fieldData = sintetis;
-  }
-  if (selectedLapangan === "Lapangan Badminton") {
-    fieldData = badminton;
-  }
-  if (selectedLapangan === "Lapangan Futsal Hardfloor") {
-    fieldData = hardfloor;
-  }
   console.log(fieldData);
 
   const [counterDropdown, setCounterDropdown] = useState(0);
@@ -92,12 +107,16 @@ const PesanLapangan = ({ fieldData }: { fieldData: object | null }) => {
 
   const handlepesan = (e: React.FormEvent) => {
     const invoice = createInvoice();
-
+    // let id_lapangan;
+    // if (fieldData) {
+    //   id_lapangan = fieldData[0]?.id_lapangan;
+    // }
+    const id_lapangan = fieldData && fieldData.length > 0 ? fieldData[0]?.id_lapangan : 0;
     // console.log(invoice)
     e.preventDefault();
     addPesan.mutate(
       {
-        id_lapangans: fieldData && fieldData[0]?.id_lapangan,
+        id_lapangans: id_lapangan,
         catatan: "Tidak ada",
         jam: counterLap,
         durasi: counterJam,
@@ -216,7 +235,7 @@ const PesanLapangan = ({ fieldData }: { fieldData: object | null }) => {
                       }}
                     />
                   </div>
-                )}
+                )} 
                 placeholder={
                   counterJam ? counterJam.toString() + " Jam" : "Total Jam."
                 } // if counter is 0, show counter.toString() else show "Jumlah Lap."

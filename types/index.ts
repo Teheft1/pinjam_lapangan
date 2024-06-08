@@ -45,6 +45,22 @@ export interface CustomCardProps {
   animationControl: any;
   whileHoverStyle?: object;
 }
+interface FieldData {
+  id_lapangan: number;
+  nama_lapangan: string;
+  jenis_lapangan: string | null;
+  status_lapangan: number | null;
+  harga: number;
+  foto: string;
+  created_by: string;
+  created_at: Date;
+  modified_by: string;
+  modified_at: Date | null;
+}
+
+interface PesanLapanganProps {
+  fieldData: FieldData[] | undefined;
+}
 
 export interface CustomCardLapanganProps {
   namaLapangan: string;
@@ -59,5 +75,5 @@ export interface CustomCardLapanganProps {
   ref: React.RefObject<HTMLParagraphElement>;
   animationControl?: any;
   whileHoverStyle?: object;
-  onPesan?: (data: object) => void;
+  onPesan?: (data: FieldData[]) => void;
 }

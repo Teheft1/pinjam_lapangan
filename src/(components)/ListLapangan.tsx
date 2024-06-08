@@ -5,7 +5,28 @@ import { AnimatedText, CustomCardLapangan } from "./CustomElements";
 import { api } from "~/utils/api";
 import { on } from "events";
 
-const ListLapangan = ({ onPesan }: { onPesan: (data: object) => void }) => {
+interface FieldData {
+  id_lapangan: number;
+  nama_lapangan: string;
+  jenis_lapangan: string | null;
+  status_lapangan: number | null;
+  harga: number;
+  foto: string;
+  created_by: string;
+  created_at: Date;
+  modified_by: string;
+  modified_at: Date | null;
+}
+
+interface PesanLapanganProps {
+  fieldData: FieldData[] | undefined;
+}
+
+const ListLapangan = ({
+  onPesan,
+}: {
+  onPesan: (data: FieldData[]) => void;
+}) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 

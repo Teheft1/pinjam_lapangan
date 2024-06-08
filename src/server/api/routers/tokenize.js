@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import * as Midtrans from "midtrans-client";
 // Step 1: Install the Midtrans Node.js client library
 // npm install midtrans-client
@@ -54,10 +56,10 @@ export const tokenizeRouter = createTRPCRouter({
       const url = await fetch(
         `https://api.sandbox.midtrans.com/v2/${input.order_id}/status`,
         {
-          headers:{
-            'Authorization': 'Basic ' + encodedKey,
-          }
-        }
+          headers: {
+            Authorization: "Basic " + encodedKey,
+          },
+        },
       );
 
       return url.json();

@@ -57,7 +57,7 @@ export const postRouter = createTRPCRouter({
   createPesan: protectedProcedure
     .input(
       z.object({
-        id_lapangans: z.number(),
+        id_lapangans: z.number().optional(),
         // tanggal: z.string(),
         jam: z.number(),
         durasi: z.number(),
@@ -73,7 +73,7 @@ export const postRouter = createTRPCRouter({
 
       return ctx.db.transaksi.create({
         data: {
-          id_lapangan: input.id_lapangans,
+          id_lapangan: input.id_lapangans ?? 0,
           id_invoice: input.id_invoice,
           // tanggal: new Date(input.tanggal),
           // jam: input.jam,
