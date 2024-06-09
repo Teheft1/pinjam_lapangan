@@ -9,10 +9,10 @@ datasource db {
 
 model account {
   id                String  @id @default(uuid()) @db.VarChar(191)
-  userid            String  @db.VarChar(191)
+  userId            String  @db.VarChar(191)
   type              String  @db.VarChar(191)
   provider          String  @db.VarChar(191)
-  provideraccountid String  @db.VarChar(191)
+  providerAccountId String  @db.VarChar(191)
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -20,9 +20,10 @@ model account {
   scope             String? @db.VarChar(191)
   id_token          String?
   session_state     String? @db.VarChar(191)
-  user              user    @relation(fields: [userid], references: [id], onDelete: Cascade)
+  user              user    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, provideraccountid])
+  @@unique([provider, providerAccountId], map: "Account_provider_providerAccountId_key")
+  @@index([userId], map: "Account_userId_fkey")
 }
 
 model album {
@@ -179,10 +180,12 @@ model provinsi {
 
 model session {
   id           String   @id @default(uuid()) @db.VarChar(191)
-  sessiontoken String   @unique @db.VarChar(191)
-  userid       String   @db.VarChar(191)
+  sessionToken String   @unique @db.VarChar(191)
+  userId       String   @db.VarChar(191)
   expires      DateTime @db.Timestamptz(3)
-  user         user     @relation(fields: [userid], references: [id], onDelete: Cascade)
+  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+   @@index([userId], map: "Session_userId_fkey")
 }
 
 model slider {
@@ -222,6 +225,9 @@ model transaksi {
   updatedat        DateTime           @db.Timestamptz(6)
   user             user               @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "transaksiFK")
   transaksi_detail transaksi_detail[]
+
+  @@index([user_id], map: "transaksi_FK")
+  @@index([id_lapangan], map: "transaksi_FK_1")
 }
 
 model transaksi_detail {
@@ -236,13 +242,15 @@ model transaksi_detail {
   total       Int
   created_at  DateTime  @default(now()) @db.Timestamptz(6)
   transaksi   transaksi @relation(fields: [trans_id], references: [id_trans], onDelete: Cascade, map: "transaksiDetail_FK_1")
+
+  @@index([lapangan_id], map: "transaksi_detail_FK")
 }
 
 model user {
   id            String      @id @default(uuid()) @db.VarChar(191)
   name          String?     @db.VarChar(191)
-  email         String?     @unique @db.VarChar(191)
-  emailverified DateTime?   @db.Timestamptz(3)
+  email         String?      @db.VarChar(191) @unique(map: "User_email_key")
+  emailVerified DateTime?   @db.Timestamptz(3)
   image         String?     @db.VarChar(191)
   role          String?     @db.VarChar(191)
   account       account[]
