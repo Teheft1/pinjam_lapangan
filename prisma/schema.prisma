@@ -3,38 +3,37 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model account {
-  id                String  @id @default(uuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  id                String  @id @default(uuid()) @db.VarChar(191)
+  userid            String  @db.VarChar(191)
+  type              String  @db.VarChar(191)
+  provider          String  @db.VarChar(191)
+  provideraccountid String  @db.VarChar(191)
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-  user              user    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Account_userId_fkey")
+  token_type        String? @db.VarChar(191)
+  scope             String? @db.VarChar(191)
+  id_token          String?
+  session_state     String? @db.VarChar(191)
+  user              user    @relation(fields: [userid], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId], map: "Account_provider_providerAccountId_key")
-  @@index([userId], map: "Account_userId_fkey")
+  @@unique([provider, provideraccountid])
 }
 
 model album {
   id_album    Int       @id @default(autoincrement())
   nama_album  String    @db.Char(50)
   slug_album  String    @db.Char(50)
-  foto        String    @db.Text
+  foto        String
   created_by  String    @db.Char(20)
-  created_at  DateTime  @default(now()) @db.DateTime(0)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
   modified_by String?   @db.Char(20)
-  modified_at DateTime? @db.DateTime(0)
+  modified_at DateTime? @db.Timestamptz(6)
   exfoto      foto[]
 }
 
@@ -49,23 +48,23 @@ model bank {
 model company {
   id_company      Int       @id @default(autoincrement())
   company_name    String    @db.VarChar(100)
-  company_desc    String    @db.Text
-  company_address String    @db.Text
-  company_maps    String    @db.Text
+  company_desc    String
+  company_address String
+  company_maps    String
   company_phone   String    @db.Char(30)
   company_phone2  String    @db.Char(30)
   company_fax     String    @db.Char(30)
   company_email   String    @db.Char(30)
-  foto            String    @db.Text
+  foto            String
   foto_type       String    @db.Char(10)
-  created         DateTime  @default(now()) @db.DateTime(0)
-  modified        DateTime? @db.DateTime(0)
+  created         DateTime  @default(now()) @db.Timestamptz(6)
+  modified        DateTime? @db.Timestamptz(6)
   created_by      String    @db.Char(50)
   modified_by     String    @db.Char(50)
 }
 
 model diskon {
-  id    Int @id
+  id    Int @id @default(autoincrement())
   harga Int
 }
 
@@ -73,13 +72,13 @@ model event {
   id_event    Int       @id @default(autoincrement())
   nama_event  String    @db.VarChar(100)
   slug_event  String?   @db.VarChar(100)
-  deskripsi   String?   @db.Text
+  deskripsi   String?
   kategori    Int?
-  foto        String?   @db.Text
+  foto        String?
   foto_type   String?   @db.Char(10)
-  created_at  DateTime  @default(now()) @db.DateTime(0)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
   created_by  String    @db.Char(50)
-  modified_at DateTime? @db.DateTime(0)
+  modified_at DateTime? @db.Timestamptz(6)
   modified_by String    @db.Char(50)
 }
 
@@ -88,20 +87,18 @@ model foto {
   album_id    Int
   nama_foto   String    @db.Char(100)
   slug_foto   String    @db.Char(100)
-  foto        String    @db.Text
+  foto        String
   created_by  String    @db.Char(20)
-  created_at  DateTime  @default(now()) @db.DateTime(0)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
   modified_by String    @db.Char(20)
-  modified_at DateTime? @db.DateTime(0)
-  album       album     @relation(fields: [album_id], references: [id_album], onDelete: Cascade, map: "foto_FK")
-
-  @@index([album_id], map: "foto_FK")
+  modified_at DateTime? @db.Timestamptz(6)
+  album       album     @relation(fields: [album_id], references: [id_album], onDelete: Cascade, map: "foto")
 }
 
 model jam {
-  id           Int    @id @default(autoincrement())
-  jam          String @db.VarChar(50)
-  is_available Int    @default(1) @db.TinyInt
+  id           Int     @id @default(autoincrement())
+  jam          String  @db.VarChar(50)
+  is_available Boolean @default(true)
 }
 
 model kategori {
@@ -109,9 +106,9 @@ model kategori {
   nama_kategori String    @db.VarChar(20)
   slug_kat      String    @db.VarChar(20)
   created_by    String    @db.Char(50)
-  created_at    DateTime  @default(now()) @db.DateTime(0)
+  created_at    DateTime  @default(now()) @db.Timestamptz(6)
   modified_by   String    @db.Char(50)
-  modified_at   DateTime? @db.DateTime(0)
+  modified_at   DateTime? @db.Timestamptz(6)
 }
 
 model kontak {
@@ -119,9 +116,9 @@ model kontak {
   nama_kontak String    @db.Char(50)
   nohp        String    @db.Char(50)
   created_by  String    @db.Char(50)
-  created_at  DateTime  @default(now()) @db.DateTime(0)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
   modified_by String    @db.Char(50)
-  modified_at DateTime? @db.DateTime(0)
+  modified_at DateTime? @db.Timestamptz(6)
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -134,45 +131,42 @@ model kota {
 }
 
 model lapangan {
-  id_lapangan      Int                @id @default(autoincrement())
-  nama_lapangan    String             @db.VarChar(100)
-  jenis_lapangan   String?             @db.VarChar(100)
-  status_lapangan  Int?                @default(1)
-  harga            Int
-  foto             String             @db.Text
-  created_by       String             @db.VarChar(50)
-  created_at       DateTime           @default(now()) @db.DateTime(0)
-  modified_by      String             @db.VarChar(50)
-  modified_at      DateTime?          @db.DateTime(0)
-  transaksi        transaksi[]
-  transaksi_detail transaksi_detail[]
+  id_lapangan     Int       @id @default(autoincrement())
+  nama_lapangan   String    @db.VarChar(100)
+  jenis_lapangan  String?   @db.VarChar(50)
+  harga           Int
+  foto            String
+  created_by      String    @db.VarChar(50)
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  modified_by     String    @db.VarChar(50)
+  modified_at     DateTime? @db.Timestamptz(6)
+  status_lapangan Int?
 }
 
 model login_attempts {
-  id         Int    @id @default(autoincrement()) @db.UnsignedInt
+  id         Int    @id @default(autoincrement())
   ip_address String @db.VarChar(15)
   login      String @db.VarChar(100)
-  time       Int?   @db.UnsignedInt
+  time       Int?
 }
 
 model page {
   id_page    Int    @id @default(autoincrement())
   judul_page String @db.VarChar(50)
   judul_seo  String @db.VarChar(50)
-  isi_page   String @db.Text
-  gambar     String @db.Text
+  isi_page   String
+  gambar     String
 }
 
 model post {
   id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  createdBy String
-  user      user     @relation(fields: [createdBy], references: [id], map: "Post_createdById_fkey")
+  name      String   @db.VarChar(191)
+  createdat DateTime @default(dbgenerated("CURRENT_TIMESTAMP(3)")) @db.Timestamptz(3)
+  updatedat DateTime @db.Timestamptz(3)
+  createdby String   @db.VarChar(191)
+  user      user     @relation(fields: [createdby], references: [id], onDelete: NoAction)
 
-  @@index([createdBy], map: "Post_createdById_fkey")
-  @@index([name], map: "Post_name_idx")
+  @@index([name])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -184,13 +178,11 @@ model provinsi {
 }
 
 model session {
-  id           String   @id @default(uuid())
-  sessionToken String   @unique(map: "Session_sessionToken_key")
-  userId       String
-  expires      DateTime
-  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Session_userId_fkey")
-
-  @@index([userId], map: "Session_userId_fkey")
+  id           String   @id @default(uuid()) @db.VarChar(191)
+  sessiontoken String   @unique @db.VarChar(191)
+  userid       String   @db.VarChar(191)
+  expires      DateTime @db.Timestamptz(3)
+  user         user     @relation(fields: [userid], references: [id], onDelete: Cascade)
 }
 
 model slider {
@@ -198,12 +190,12 @@ model slider {
   no_urut     Int
   nama_slider String    @db.VarChar(100)
   link        String    @db.VarChar(100)
-  foto        String    @db.Text
+  foto        String
   foto_type   String    @db.Char(10)
   foto_size   Int
-  created_at  DateTime  @default(now()) @db.DateTime(0)
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
   created_by  String    @db.Char(50)
-  modified_at DateTime? @db.DateTime(0)
+  modified_at DateTime? @db.Timestamptz(6)
   modified_by String    @db.Char(50)
 }
 
@@ -211,29 +203,25 @@ model subscriber {
   id_subscriber Int      @id @default(autoincrement())
   email         String   @db.Char(20)
   status        Int
-  created_at    DateTime @default(now()) @db.DateTime(0)
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model transaksi {
   id_trans         Int                @id @default(autoincrement())
   id_invoice       String             @db.Char(100)
   id_lapangan      Int
-  user_id          String
+  user_id          String             @db.VarChar(191)
   subtotal         Int
   diskon           Int
   grand_total      Int
-  deadline         DateTime           @db.DateTime(0)
-  catatan          String             @db.Text
+  deadline         DateTime           @db.Timestamptz(6)
+  catatan          String
   status           Int
   created_date     DateTime           @db.Date
-  created_time     DateTime           @db.Time(0)
-  updatedAt         DateTime           @db.DateTime(0)
-  user             user               @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "transaksi_FK")
-  lapangan         lapangan           @relation(fields: [id_lapangan], references: [id_lapangan], onDelete: Cascade, map: "transaksi_FK_1")
+  created_time     DateTime           @db.Time(6)
+  updatedat        DateTime           @db.Timestamptz(6)
+  user             user               @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "transaksiFK")
   transaksi_detail transaksi_detail[]
-
-  @@index([user_id], map: "transaksi_FK")
-  @@index([id_lapangan], map: "transaksi_FK_1")
 }
 
 model transaksi_detail {
@@ -241,26 +229,22 @@ model transaksi_detail {
   trans_id    Int
   lapangan_id Int
   tanggal     DateTime  @db.Date
-  jam_mulai   DateTime? @db.Time(0)
+  jam_mulai   DateTime? @db.Time(6)
   durasi      Int
-  jam_selesai DateTime? @db.Time(0)
+  jam_selesai DateTime? @db.Time(6)
   harga_jual  Int
   total       Int
-  created_at  DateTime  @default(now()) @db.DateTime(0)
-  lapangan    lapangan  @relation(fields: [lapangan_id], references: [id_lapangan], onDelete: Cascade, map: "transaksi_detail_FK")
-  transaksi   transaksi @relation(fields: [trans_id], references: [id_trans], onDelete: Cascade, map: "transaksi_detail_FK_1")
-
-  @@index([lapangan_id], map: "transaksi_detail_FK")
-  @@index([trans_id], map: "transaksi_detail_FK_1")
+  created_at  DateTime  @default(now()) @db.Timestamptz(6)
+  transaksi   transaksi @relation(fields: [trans_id], references: [id_trans], onDelete: Cascade, map: "transaksiDetail_FK_1")
 }
 
 model user {
-  id            String      @id @default(uuid())
-  name          String?
-  email         String?     @unique(map: "User_email_key")
-  emailVerified DateTime?
-  image         String?
-  role          String?
+  id            String      @id @default(uuid()) @db.VarChar(191)
+  name          String?     @db.VarChar(191)
+  email         String?     @unique @db.VarChar(191)
+  emailverified DateTime?   @db.Timestamptz(3)
+  image         String?     @db.VarChar(191)
+  role          String?     @db.VarChar(191)
   account       account[]
   post          post[]
   session       session[]
@@ -276,20 +260,20 @@ model users {
   phone                   String?   @db.VarChar(20)
   provinsi                Int?
   kota                    Int?
-  address                 String    @db.Text
+  address                 String
   usertype                Int
-  active                  Int?      @db.UnsignedTinyInt
-  photo                   String?   @db.Text
+  active                  Boolean?
+  photo                   String?
   photo_type              String?   @db.VarChar(10)
   ip_address              String    @db.VarChar(45)
   salt                    String?   @db.VarChar(255)
   activation_code         String?   @db.VarChar(40)
   forgotten_password_code String?   @db.VarChar(40)
-  forgotten_password_time Int?      @db.UnsignedInt
+  forgotten_password_time Int?
   remember_code           String?   @db.VarChar(40)
   last_login              Int?
   created_on              Int
-  modified                DateTime? @db.DateTime(0)
+  modified                DateTime? @db.Timestamptz(6)
 
   @@ignore
 }
@@ -300,9 +284,9 @@ model users_group {
 }
 
 model verificationtoken {
-  identifier String
-  token      String   @unique(map: "VerificationToken_token_key")
-  expires    DateTime
+  identifier String   @db.VarChar(191)
+  token      String   @unique @db.VarChar(191)
+  expires    DateTime @db.Timestamptz(3)
 
-  @@unique([identifier, token], map: "VerificationToken_identifier_token_key")
+  @@unique([identifier, token])
 }

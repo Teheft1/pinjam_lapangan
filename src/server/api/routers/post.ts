@@ -25,16 +25,16 @@ export const postRouter = createTRPCRouter({
       return ctx.db.post.create({
         data: {
           name: input.name,
-          createdBy: ctx.session.user.id,
-          updatedAt: new Date(),
+          createdby: ctx.session.user.id,
+          updatedat: new Date(),
         },
       });
     }),
 
   getLatest: protectedProcedure.query(({ ctx }) => {
     return ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-      where: { createdBy: ctx.session.user.id },
+      orderBy: { createdat: "desc" },
+      where: { createdby: ctx.session.user.id },
     });
   }),
 
@@ -87,7 +87,7 @@ export const postRouter = createTRPCRouter({
           catatan: input.catatan,
           grand_total: input.grand_total,
           deadline: new Date(+1),
-          updatedAt: new Date(),
+          updatedat: new Date(),
         },
       });
     }),
