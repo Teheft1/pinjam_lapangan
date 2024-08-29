@@ -264,7 +264,7 @@ const PesanLapangan = ({ fieldData }: PesanLapanganProps) => {
                 onChange={(e) =>
                   setBiodata({ ...biodata, nama: e.target.value })
                 }
-                placeholder="Nopal 165 fullarmor i7 32"
+                placeholder="Naufal"
                 className="focus:border-teal  box-border h-[71px] w-[886px] rounded-[8px] bg-transparent pl-5 focus:border-[3px] focus:border-[#FE770B] focus:outline-none focus:ring-0"
               />
             </div>
@@ -291,7 +291,7 @@ const PesanLapangan = ({ fieldData }: PesanLapanganProps) => {
                   onChange={(e) =>
                     setBiodata({ ...biodata, asal: e.target.value })
                   }
-                  placeholder="Bojonegro"
+                  placeholder="Bojonegoro"
                   className="focus:border-teal  box-border h-[71px] w-[453px] rounded-[8px] bg-transparent pl-5 focus:border-[3px] focus:border-[#FE770B] focus:outline-none focus:ring-0"
                 />
               </div>
